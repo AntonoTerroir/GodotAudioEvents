@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://AudioEvent.gd" type="Script" id=1]
+[ext_resource path="res://AudioModifiers/AudioModifier.tres" type="Resource" id=2]
+
+[node name="Node" type="Node"]
+
+[node name="AudioEvent" type="Node" parent="."]
+script = ExtResource( 1 )
+volume_db = -20.0
+override_parent_pitch = true
+override_parent_volume = true
+modifiers = [ ExtResource( 2 ), ExtResource( 2 ) ]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AudioEvent"]
+volume_db = -5.0

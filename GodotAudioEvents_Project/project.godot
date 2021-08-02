@@ -1,0 +1,45 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node",
+"class": "AudioEvent",
+"language": "GDScript",
+"path": "res://AudioEvent.gd"
+}, {
+"base": "Resource",
+"class": "AudioModifier",
+"language": "GDScript",
+"path": "res://AudioModifier.gd"
+}, {
+"base": "AudioModifier",
+"class": "StartDelay",
+"language": "GDScript",
+"path": "res://StartDelay.gd"
+} ]
+_global_script_class_icons={
+"AudioEvent": "",
+"AudioModifier": "",
+"StartDelay": ""
+}
+
+[application]
+
+config/name="GodotAudioEvents_Project"
+run/main_scene="res://Scenes/TestScene.tscn"
+config/icon="res://icon.png"
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
