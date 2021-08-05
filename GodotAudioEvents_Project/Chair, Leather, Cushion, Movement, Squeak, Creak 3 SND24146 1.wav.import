@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Chair, Leather, Cushion, Movement, Squeak, Creak 3 SND24146 1.wav-83c5a3e910d5042c393ea1c9a238e848.sample"
+
+[deps]
+
+source_file="res://Chair, Leather, Cushion, Movement, Squeak, Creak 3 SND24146 1.wav"
+dest_files=[ "res://.import/Chair, Leather, Cushion, Movement, Squeak, Creak 3 SND24146 1.wav-83c5a3e910d5042c393ea1c9a238e848.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

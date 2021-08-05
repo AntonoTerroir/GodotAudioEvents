@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Wind, Interior, Strong Wind, Gusts SND11267.wav-029caad72e4e3790c81f2608ff4c7684.sample"
+
+[deps]
+
+source_file="res://Wind, Interior, Strong Wind, Gusts SND11267.wav"
+dest_files=[ "res://.import/Wind, Interior, Strong Wind, Gusts SND11267.wav-029caad72e4e3790c81f2608ff4c7684.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

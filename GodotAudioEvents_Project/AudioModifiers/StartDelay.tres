@@ -4,6 +4,5 @@
 
 [resource]
 script = ExtResource( 1 )
-priority = 0
-delay_mode = 1
+delay_mode = 0
 duration = 5.0

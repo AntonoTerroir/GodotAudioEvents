@@ -19,15 +19,45 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://AudioModifier.gd"
 }, {
+"base": "AudioEvent",
+"class": "BlendAudioEvent",
+"language": "GDScript",
+"path": "res://BlendAudioEvent.gd"
+}, {
+"base": "AudioModifier",
+"class": "PitchModulation",
+"language": "GDScript",
+"path": "res://PitchModulation.gd"
+}, {
+"base": "AudioEvent",
+"class": "RandomAudioEvent",
+"language": "GDScript",
+"path": "res://RandomAudioEvent.gd"
+}, {
+"base": "AudioEvent",
+"class": "SequenceAudioEvent",
+"language": "GDScript",
+"path": "res://SequenceAudioEvent.gd"
+}, {
 "base": "AudioModifier",
 "class": "StartDelay",
 "language": "GDScript",
 "path": "res://StartDelay.gd"
+}, {
+"base": "AudioEvent",
+"class": "SwitchAudioEvent",
+"language": "GDScript",
+"path": "res://SwitchAudioEvent.gd"
 } ]
 _global_script_class_icons={
-"AudioEvent": "",
-"AudioModifier": "",
-"StartDelay": ""
+"AudioEvent": "res://AudioEvent/Icons/AudioEvent.png",
+"AudioModifier": "res://AudioEvent/Icons/AudioModifier.png",
+"BlendAudioEvent": "res://AudioEvent/Icons/BlendAudioEvent.png",
+"PitchModulation": "",
+"RandomAudioEvent": "res://AudioEvent/Icons/RandomAudioEvent.png",
+"SequenceAudioEvent": "res://AudioEvent/Icons/SequenceAudioEvent.png",
+"StartDelay": "",
+"SwitchAudioEvent": "res://AudioEvent/Icons/SwitchAudioEvent.png"
 }
 
 [application]

@@ -1,7 +1,7 @@
-class_name AudioModifier
+class_name AudioModifier, "res://AudioEvent/Icons/AudioModifier.png"
 extends Resource
 
-export var priority = 0
+var priority = 0
 
 # Appliquer l'effet du modifier
 func apply(event : AudioEvent):

@@ -1,16 +1,160 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://AudioEvent.gd" type="Script" id=1]
-[ext_resource path="res://AudioModifiers/AudioModifier.tres" type="Resource" id=2]
+[ext_resource path="res://RandomAudioEvent.gd" type="Script" id=2]
+[ext_resource path="res://mus_rustle_guitar_full.wav" type="AudioStream" id=3]
+[ext_resource path="res://BlendAudioEvent.gd" type="Script" id=4]
+[ext_resource path="res://Footsteps, Human, Asphalt, Male, Leather Sole, Walk, Scuff SND11518.wav" type="AudioStream" id=5]
+[ext_resource path="res://Chair, Leather, Cushion, Movement, Squeak, Creak 3 SND24146 1.wav" type="AudioStream" id=6]
+[ext_resource path="res://Wind, Interior, Strong Wind, Gusts SND11267.wav" type="AudioStream" id=7]
+[ext_resource path="res://SequenceAudioEvent.gd" type="Script" id=8]
+[ext_resource path="res://Scenes/Button.tscn" type="PackedScene" id=9]
+[ext_resource path="res://SwitchAudioEvent.gd" type="Script" id=11]
+[ext_resource path="res://Scenes/Test_de_ses_morts.gd" type="Script" id=12]
 
 [node name="Node" type="Node"]
 
 [node name="AudioEvent" type="Node" parent="."]
 script = ExtResource( 1 )
-volume_db = -20.0
-override_parent_pitch = true
-override_parent_volume = true
-modifiers = [ ExtResource( 2 ), ExtResource( 2 ) ]
+fade_in_active = true
+fade_in_time = 1.0
+fade_in_type = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AudioEvent"]
+stream = ExtResource( 3 )
 volume_db = -5.0
+
+[node name="RandomAudioEvent" type="Node" parent="."]
+script = ExtResource( 2 )
+fade_in_active = true
+fade_in_time = 2.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RandomAudioEvent"]
+stream = ExtResource( 6 )
+volume_db = -11.435
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="RandomAudioEvent"]
+stream = ExtResource( 5 )
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="RandomAudioEvent"]
+stream = ExtResource( 7 )
+volume_db = -17.992
+
+[node name="AudioEvent" type="Node" parent="RandomAudioEvent"]
+script = ExtResource( 1 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RandomAudioEvent/AudioEvent"]
+stream = ExtResource( 3 )
+volume_db = -5.0
+
+[node name="BlendAudioEvent" type="Node" parent="."]
+script = ExtResource( 4 )
+fade_in_active = true
+fade_in_time = 4.0
+fade_in_type = 1
+fade_out_active = true
+fade_out_time = 5.0
+autoplay = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="BlendAudioEvent"]
+stream = ExtResource( 6 )
+volume_db = -20.0
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="BlendAudioEvent"]
+stream = ExtResource( 5 )
+volume_db = -20.0
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="BlendAudioEvent"]
+stream = ExtResource( 7 )
+volume_db = -20.0
+
+[node name="AudioEvent" type="Node" parent="BlendAudioEvent"]
+script = ExtResource( 1 )
+fade_in_active = true
+fade_in_time = 3.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="BlendAudioEvent/AudioEvent"]
+stream = ExtResource( 3 )
+volume_db = -5.0
+
+[node name="SequenceAudioEvent" type="Node" parent="."]
+script = ExtResource( 8 )
+on_sequence_end = 3
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="SequenceAudioEvent"]
+stream = ExtResource( 6 )
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="SequenceAudioEvent"]
+stream = ExtResource( 5 )
+
+[node name="AudioStreamPlayer3" type="AudioStreamPlayer" parent="SequenceAudioEvent"]
+stream = ExtResource( 7 )
+
+[node name="AudioEvent" type="Node" parent="SequenceAudioEvent"]
+script = ExtResource( 1 )
+fade_in_time = 3.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="SequenceAudioEvent/AudioEvent"]
+stream = ExtResource( 3 )
+volume_db = -5.0
+
+[node name="Button" parent="." instance=ExtResource( 9 )]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 150.0
+margin_bottom = 41.0
+text = "Sequence"
+
+[node name="Button2" parent="." instance=ExtResource( 9 )]
+margin_left = 196.0
+margin_top = 2.0
+margin_right = 344.0
+margin_bottom = 41.0
+text = "Random"
+
+[node name="Button3" parent="." instance=ExtResource( 9 )]
+margin_left = 410.0
+margin_top = 2.0
+margin_right = 558.0
+margin_bottom = 41.0
+text = "Stop Blend"
+
+[node name="Button4" parent="." instance=ExtResource( 9 )]
+margin_left = 610.0
+margin_top = 1.0
+margin_right = 758.0
+margin_bottom = 40.0
+text = "Set Switch 01"
+
+[node name="Button5" parent="." instance=ExtResource( 9 )]
+margin_left = 612.0
+margin_top = 59.0
+margin_right = 760.0
+margin_bottom = 98.0
+text = "Play Switch"
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource( 12 )
+
+[node name="SwitchAudioEvent" type="Node" parent="Node"]
+script = ExtResource( 11 )
+max_voices = 2
+switch_mode = 2
+crossfade_time = 2.0
+
+[node name="AudioEvent" type="Node" parent="Node/SwitchAudioEvent"]
+script = ExtResource( 1 )
+fade_in_time = 3.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Node/SwitchAudioEvent/AudioEvent"]
+stream = ExtResource( 3 )
+volume_db = -5.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Node/SwitchAudioEvent"]
+stream = ExtResource( 6 )
+
+[connection signal="pressed" from="Button" to="SequenceAudioEvent" method="_on_Button_pressed"]
+[connection signal="pressed" from="Button2" to="RandomAudioEvent" method="_on_Button2_pressed"]
+[connection signal="pressed" from="Button3" to="BlendAudioEvent" method="_on_Button3_pressed"]
+[connection signal="pressed" from="Button4" to="Node" method="_on_Button4_pressed"]
+[connection signal="pressed" from="Button5" to="Node" method="_on_Button5_pressed"]

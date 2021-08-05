@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://PitchModulation.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+pitchMode = 0
+minPitch = 1.0
+maxPitch = 1.0
+pitch_steps = [ 0.01, 0.0, 0.0, 0.0 ]
