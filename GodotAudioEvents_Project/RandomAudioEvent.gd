@@ -1,8 +1,6 @@
 extends AudioEvent
 class_name RandomAudioEvent, "res://AudioEvent/Icons/RandomAudioEvent.png"
 
-var audioChildren = []
-
 export(int, 1, 50) var max_voices = 1
 var playingChildren = []
 
@@ -14,9 +12,6 @@ enum VoicePriority {
 export(VoicePriority) var voice_priority = VoicePriority.STEAL_OLDEST
 
 func _on_ready():
-	for child in get_children():
-		if is_audio_node(child):
-			audioChildren.append(child)
 	
 	if(autoplay):
 		play()
@@ -51,8 +46,11 @@ func play():
 				playingChildren[max_voices - 1].stop()
 				playingChildren.remove(max_voices - 1)
 	playingChildren.append(event)
+	
+	set_is_playing(true)
 
 func stop(id = -1):
+	if !isPlaying: return
 	
 	if(id < 0 || id > (audioChildren.size() - 1)):
 		for child in playingChildren:
@@ -70,8 +68,36 @@ func stop(id = -1):
 			else:
 				event.fade_out(fade_out_time, fade_out_type)
 		else: audioChildren[id].stop()
+	
+	set_is_playing(false)
+
+func pause():
+	if !isPlaying: return
+	
+	set_is_paused(true)
+	for child in audioChildren:
+		if is_audio_stream(child):
+			child.set_stream_paused(true)
+		else:
+			if child.isFading:
+				child.tween.stop_all()
+			child.pause()
+
+func resume():
+	if !isPlaying: return
+	
+	set_is_paused(false)
+	for child in audioChildren:
+		if is_audio_stream(child):
+			child.set_stream_paused(false)
+		else:
+			if child.isFading:
+				child.tween.resume_all()
+			child.resume()
 
 func fade_out(fade_time:float = fade_out_time, fade_type:int = fade_out_type):
+	if !isPlaying: return
+	
 	for child in playingChildren:
 		event = child
 		if is_audio_stream(event):
@@ -82,6 +108,8 @@ func fade_out(fade_time:float = fade_out_time, fade_type:int = fade_out_type):
 			emit_signal("fade_out_completed")
 		else:
 			event.fade_out(fade_out_time, fade_out_type)
+	
+	set_is_playing(false)
 
 var lastRandomSound
 

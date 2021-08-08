@@ -1,8 +1,6 @@
 extends AudioEvent
 class_name SwitchAudioEvent, "res://AudioEvent/Icons/SwitchAudioEvent.png"
 
-var audioChildren = []
-
 export(int, 1, 50) var max_voices = 1
 var playingChildren = []
 
@@ -26,9 +24,6 @@ export(float) var crossfade_time = 0
 export var current_switch = 0
 
 func _on_ready():
-	for child in get_children():
-		if is_audio_node(child):
-			audioChildren.append(child)
 	
 	if(autoplay):
 		play()
@@ -62,8 +57,11 @@ func play():
 				playingChildren[max_voices - 1].stop()
 				playingChildren.remove(max_voices - 1)
 	playingChildren.append(event)
+	
+	set_is_playing(true)
 
 func stop(id = -1):
+	if !isPlaying: return
 	
 	if(id < 0 || id > (audioChildren.size() - 1)):
 		for child in playingChildren:
@@ -81,12 +79,17 @@ func stop(id = -1):
 			else:
 				event.fade_out(fade_out_time, fade_in_type)
 		else: audioChildren[id].stop()
+	
+	set_is_playing(false)
 
 func set_switch(soundID: int):
 	current_switch = soundID
+	
+	if !isPlaying: return
+	
 	match switch_mode:
 		SwitchMode.CROSSFADE:
-			event.fade_out(crossfade_time)
+			fade_out(crossfade_time)
 			event = audioChildren[current_switch]
 			fade_in(true, event.get_volume_db(), crossfade_time)
 		SwitchMode.IMMEDIATE:
@@ -96,6 +99,7 @@ func set_switch(soundID: int):
 			return
 
 func fade_in(apply_mods:bool = false, target_volume:float = get_volume_db(), fade_time:float = fade_in_time, fade_type:int = fade_in_type):
+	if isPlaying: return
 	
 	if apply_mods:
 		var mods = apply_modifier()
@@ -111,6 +115,9 @@ func fade_in(apply_mods:bool = false, target_volume:float = get_volume_db(), fad
 		emit_signal("fade_in_completed")
 	else:
 		event.fade_in(true, event.get_volume_db(), fade_in_time, fade_in_type)
+	
+	if apply_mods:
+		set_is_playing(true)
 
 func _get_configuration_warning():
 	var cond = false

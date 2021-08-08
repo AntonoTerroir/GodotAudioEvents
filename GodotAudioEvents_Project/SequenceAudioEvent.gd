@@ -1,7 +1,6 @@
 extends AudioEvent
 class_name SequenceAudioEvent, "res://AudioEvent/Icons/SequenceAudioEvent.png"
 
-var audioChildren = []
 var cur_index = 0
 
 var _reverse = false
@@ -28,10 +27,6 @@ export(VoicePriority) var voice_priority = VoicePriority.STEAL_OLDEST
 
 
 func _on_ready():
-	for child in get_children():
-		if is_audio_node(child):
-			audioChildren.append(child)
-	
 	if(autoplay):
 		play()
 	
@@ -73,6 +68,8 @@ func play(id = -1):
 	
 	cur_index += 1 if !_reverse else -1
 	
+	set_is_playing(true)
+	
 	if _reverse:
 		if cur_index == -1:
 			_reverse = false
@@ -83,7 +80,7 @@ func play(id = -1):
 			return 
 	else:
 		if cur_index < audioChildren.size(): return
-
+	
 	match on_sequence_end:
 		SequenceEnd.STOP:
 			_playlist_finished = true
@@ -94,8 +91,11 @@ func play(id = -1):
 			cur_index -= 1
 		SequenceEnd.REPEAT_LAST:
 			cur_index -= 1
+	
 
 func stop(id = -1):
+	if !isPlaying: return
+	
 	if(id < 0 || id > (audioChildren.size() - 1)):
 		for child in playingChildren:
 			event = child
@@ -112,8 +112,12 @@ func stop(id = -1):
 			else:
 				event.fade_out(fade_out_time, fade_in_type)
 		else: audioChildren[id].stop()
+	
+	set_is_playing(false)
 
 func fade_out(fade_time:float = fade_out_time, fade_type:int = fade_out_type):
+	if !isPlaying: return
+	
 	for child in playingChildren:
 		event = child
 		if is_audio_stream(event):
@@ -124,6 +128,7 @@ func fade_out(fade_time:float = fade_out_time, fade_type:int = fade_out_type):
 			emit_signal("fade_out_completed")
 		else:
 			event.fade_out(fade_out_time, fade_in_type)
+	set_is_playing(false)
 
 func _get_configuration_warning():
 	var cond = false
