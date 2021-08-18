@@ -2,112 +2,118 @@ extends AudioEvent
 class_name BlendAudioEvent, "res://AudioEvent/Icons/BlendAudioEvent.png"
 
 func _on_ready():
-		
+	
+	_set_is_fading(false)
+	_set_is_paused(false)
+	_set_is_playing(false)
+	
 	if autoplay:
 		play()
 
 func play():
 	
-	if isFading:
-		tweens_stop_and_reset()
-		set_is_fading(false)
+	if _isFading:
+		_tweens_stop_and_reset()
+		_set_is_fading(false)
 	
-	if isPaused:
+	if _isPaused:
 		resume()
 	
-	for child in audioChildren:
-		event = child
+	for child in _audioChildren:
+		_event = child
 		if(fade_in_active):
-			if is_audio_stream(event):
-				fade_in()
+			if _is_audio_stream(_event):
+				_fade_in()
 			else:
-				event.fade_in(true, event.get_volume_db(), fade_in_time, fade_in_type)
-		else: event.play()
+				_event._fade_in(true, 0, fade_in_time, fade_in_type)
+		else: _event.play()
 		
-	set_is_playing(true)
+	_set_is_playing(true)
 
 func stop():
-	if !isPlaying: return
+	if !_isPlaying: return
 	
 	var _wasPaused = false
 	
-	if isPaused:
+	if _isPaused:
 		_wasPaused = true
 		resume()
 		
-	for child in audioChildren:
-		event = child
+	for child in _audioChildren:
+		_event = child
 		if(!fade_out_active || _wasPaused):
-			event.stop()
-			set_is_playing(false)
+			_event.stop()
+			_isPlaying = false
 		else:
-			if is_audio_stream(event):
-				fade_out()
+			if _is_audio_stream(_event):
+				_fade_out()
 			else:
-				event.fade_out(fade_out_time, fade_in_type)
+				_event._fade_out(fade_out_time, fade_in_type)
 
 func pause():
-	if !isPlaying: return
+	if !_isPlaying: return
 	
-	set_is_paused(true)
-	for child in audioChildren:
-		if is_audio_stream(child):
-			child.set_stream_paused(true)
+	_set_is_paused(true)
+	for child in _audioChildren:
+		if _is_audio_stream(child):
+			child._set_stream_paused(true)
 		else:
-			if child.isFading:
-				child.tween.stop_all()
+			if child._isFading:
+				child._tween.stop_all()
 			child.pause()
 
 func resume():
-	if !isPlaying: return
+	if !_isPlaying: return
 	
-	set_is_paused(false)
-	for child in audioChildren:
-		if is_audio_stream(child):
-			child.set_stream_paused(false)
+	_set_is_paused(false)
+	for child in _audioChildren:
+		if _is_audio_stream(child):
+			child._set_stream_paused(false)
 		else:
-			if child.isFading:
-				child.tween.resume_all()
+			if child._isFading:
+				child._tween.resume_all()
 			child.resume()
 
-func fade_in(apply_mods:bool = false, target_volume:float = get_volume_db(), fade_time:float = fade_in_time, fade_type:int = fade_in_type):
-	if isPlaying: return
+func _fade_in(apply_mods:bool = false, target_volume:float = 0, fade_time:float = fade_in_time, fade_type:int = fade_in_type):
+	if _isPlaying: return
 	
-	for child in audioChildren:
-		event = child
-		if is_audio_stream(event):
+	for child in _audioChildren:
+		_event = child
+		if _is_audio_stream(_event):
+			var _start_volume = _event.volume_db
 			set_volume_db(-80)
-			event.play()
-			tween.interpolate_property(event, "volume_db", -80, target_volume, fade_time, fade_type, Tween.EASE_OUT, 0)
-			tween.start()
-			set_is_fading(true)
-			yield(tween, "tween_all_completed")
+			_event.play()
+			_tween.interpolate_property(_event, "volume_db", -80, _start_volume, fade_time, fade_type, Tween.EASE_OUT, 0)
+			_tween.start()
+			_set_is_fading(true)
+			yield(_tween, "tween_all_completed")
 			emit_signal("fade_in_completed")
-			set_is_fading(false)
+			_set_is_fading(false)
 		else:
-			event.fade_in(true, event.get_volume_db(), fade_in_time, fade_in_type)
+			_event._fade_in(true, 0, fade_in_time, fade_in_type)
 	if apply_mods:
-		set_is_playing(true)
+		_set_is_playing(true)
 
-func fade_out(fade_time:float = fade_out_time, fade_type:int = fade_out_type):
-	if !isPlaying: return
+func _fade_out(fade_time:float = fade_out_time, fade_type:int = fade_out_type):
+	if !_isPlaying: return
 	
-	set_is_fading(true)
+	_set_is_fading(true)
 	
-	for child in audioChildren:
-		event = child
-		if is_audio_stream(event):
-			var start_volume = event.volume_db
-			tween.interpolate_property(event, "volume_db", start_volume, -80, fade_time, fade_type, Tween.EASE_OUT, 0)
-			tween.start()
-			yield(tween, "tween_all_completed")
-			event.stop()
+	for child in _audioChildren:
+		_event = child
+		if _is_audio_stream(_event):
+			var _start_volume = _event.volume_db
+			_tween.interpolate_property(_event, "volume_db", _start_volume, -80, fade_time, fade_type, Tween.EASE_OUT, 0)
+			_tween.start()
+			yield(_tween, "tween_all_completed")
+			_event.stop()
 			emit_signal("fade_out_completed")
-			set_is_fading(false)
-			set_volume_db(start_volume)
+			_set_is_fading(false)
+			set_volume_db(_start_volume)
 		else:
-			event.fade_out(fade_out_time, fade_in_type)
+			_event._fade_out(fade_out_time, fade_in_type)
 	
-	set_is_playing(false)
+	_set_is_playing(false)
+
 
 func get_class(): return "BlendAudioEvent"

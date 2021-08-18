@@ -7,12 +7,13 @@ var sequence_event
 
 func _ready():
 	switch_event = $SwitchAudioEvent
-	blend_event = $BlendAudioEvent
+	blend_event = $FootStep
 	random_event = $RandomAudioEvent
 	sequence_event = $SequenceAudioEvent
 
 func set_switch(id: int):
 	switch_event.set_switch(id)
+	$FootStep/Surface_Type_Switch.set_switch(id)
 	
 func play_switch_event():
 	switch_event.play()
@@ -79,3 +80,11 @@ func _on_BlendPauseButton_pressed():
 
 func _on_BlendResumeButton_pressed():
 	blend_event.resume()
+
+
+func _on_RandomPauseButton_pressed():
+	random_event.pause()
+
+
+func _on_RandomResumeButton_pressed():
+	random_event.resume()
