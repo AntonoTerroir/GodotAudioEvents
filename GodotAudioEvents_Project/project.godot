@@ -14,7 +14,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://GAT/Scripts/AudioEvent.gd"
 }, {
-"base": "Reference",
+"base": "Resource",
 "class": "AudioModifier",
 "language": "GDScript",
 "path": "res://GAT/Scripts/AudioModifier.gd"
@@ -51,7 +51,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AudioEvent": "res://GAT/Icons/AudioEvent.png",
-"AudioModifier": "",
+"AudioModifier": "res://GAT/Icons/AudioModifier.png",
 "BlendAudioEvent": "res://GAT/Icons/BlendAudioEvent.png",
 "PitchModulation": "",
 "RandomAudioEvent": "res://GAT/Icons/RandomAudioEvent.png",

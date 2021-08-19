@@ -213,14 +213,11 @@ func _fade_out(fade_time:float = fade_out_time, fade_type:int = fade_out_type):
 
 func get_volume_db():
 	
-	if _is_audio_stream(_event):
-		return _event.volume_db
-	else:
-		_event.get_volume_db()
+	_event.get_volume_db()
 	
 func set_volume_db(volume: float):
 	
-	_event.volume_db = volume
+	_event.set_volume_db(volume)
 
 func _set_is_playing(value: bool):
 	

@@ -1,4 +1,4 @@
-class_name AudioModifier, "res://AudioEvent/Icons/AudioModifier.png"
+class_name AudioModifier, "res://GAT/Icons/AudioModifier.png"
 extends Resource
 
 var priority = 0

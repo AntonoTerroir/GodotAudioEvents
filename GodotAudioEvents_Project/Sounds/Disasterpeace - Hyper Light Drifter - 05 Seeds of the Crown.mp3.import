@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Disasterpeace - Hyper Light Drifter - 05 Seeds of the Crown.mp3-0edad8dba0f93a866ca5dd1acf654006.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Disasterpeace - Hyper Light Drifter - 05 Seeds of the Crown.mp3"
+dest_files=[ "res://.import/Disasterpeace - Hyper Light Drifter - 05 Seeds of the Crown.mp3-0edad8dba0f93a866ca5dd1acf654006.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

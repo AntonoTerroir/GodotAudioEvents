@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://GAT/Scripts/AudioEvent.gd" type="Script" id=1]
 [ext_resource path="res://GAT/Scripts/RandomAudioEvent.gd" type="Script" id=2]
@@ -29,6 +29,9 @@
 [ext_resource path="res://Sounds/FS_Gravel_04.wav" type="AudioStream" id=27]
 [ext_resource path="res://Sounds/FS_Gravel_06.wav" type="AudioStream" id=28]
 [ext_resource path="res://Sounds/FS_Gravel_07.wav" type="AudioStream" id=29]
+[ext_resource path="res://Sounds/Disasterpeace - Hyper Light Drifter - 04 Wisdom's Tragedy.mp3" type="AudioStream" id=30]
+[ext_resource path="res://Sounds/Disasterpeace - Hyper Light Drifter - 03 Titan.mp3" type="AudioStream" id=31]
+[ext_resource path="res://Sounds/Disasterpeace - Hyper Light Drifter - 05 Seeds of the Crown.mp3" type="AudioStream" id=32]
 
 [sub_resource type="Gradient" id=1]
 colors = PoolColorArray( 0.3312, 0.1824, 0.48, 1, 0.5, 0.135, 0.4635, 1 )
@@ -53,32 +56,26 @@ volume_db = -5.0
 
 [node name="SwitchAudioEvent" type="Node" parent="AudioManager"]
 script = ExtResource( 11 )
-max_voices = 2
-switch_mode = 2
-crossfade_time = 2.0
+max_voices = 50
+switch_mode = 3
+crossfade_time = 1.0
 
 [node name="AudioEvent" type="Node" parent="AudioManager/SwitchAudioEvent"]
 script = ExtResource( 1 )
 fade_in_time = 3.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager/SwitchAudioEvent/AudioEvent"]
-stream = ExtResource( 3 )
+stream = ExtResource( 31 )
 volume_db = -5.0
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager/SwitchAudioEvent"]
-stream = ExtResource( 6 )
+stream = ExtResource( 30 )
 
 [node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="AudioManager/SwitchAudioEvent"]
-stream = ExtResource( 5 )
+stream = ExtResource( 32 )
 
 [node name="RandomAudioEvent" type="Node" parent="AudioManager"]
 script = ExtResource( 2 )
-fade_in_active = true
-fade_in_time = 3.0
-fade_in_type = 1
-fade_out_active = true
-fade_out_time = 3.0
-fade_out_type = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="AudioManager/RandomAudioEvent"]
 stream = ExtResource( 6 )

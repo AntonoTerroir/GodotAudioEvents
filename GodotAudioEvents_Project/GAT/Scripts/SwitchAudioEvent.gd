@@ -14,7 +14,8 @@ export(VoicePriority) var voice_priority = VoicePriority.STEAL_OLDEST
 enum SwitchMode {
 	IMMEDIATE,
 	NEXT_PLAY,
-	CROSSFADE
+	CROSSFADE,
+	CROSSFADE_AND_STOP
 }
 
 export(SwitchMode) var switch_mode = SwitchMode.NEXT_PLAY
@@ -31,8 +32,6 @@ func _on_ready():
 	
 func play():
 	
-	_event = _audio_children[current_switch]
-	
 	if(modifiers.size() > 0):
 		modifiers.sort_custom(self, "_sort_custom_mod_priority")
 		print_debug(modifiers.size())
@@ -40,7 +39,33 @@ func play():
 			var obj = mod.apply(_event)
 			if obj is GDScriptFunctionState:
 				yield(obj, "completed")
+
+	if(switch_mode == SwitchMode.CROSSFADE):
+		if fading:
+			_tweens_stop_and_reset()
+			_set_is_fading(false)
 	
+		if paused:
+			resume()
+		
+		for child in _audio_children:
+			_event = child
+			
+			if (child == _audio_children[current_switch]):
+				if(fade_in_active):
+					if _is_audio_stream(_event):
+						_fade_in()
+					else:
+						_event._fade_in(true, 0, fade_in_time, fade_in_type)
+				else: _event.play()
+			else:
+				_event.set_volume_db(-80)
+				_event.play()
+		
+		_set_is_playing(true)
+		return
+	
+	_event = _audio_children[current_switch]
 	if(fade_in_active):
 		if _is_audio_stream(_event):
 			_fade_in(false)
@@ -65,6 +90,31 @@ func stop(id = -1):
 	if !playing: return
 	
 	if(id < 0 || id > (_audio_children.size() - 1)):
+		
+		if(switch_mode == SwitchMode.CROSSFADE):
+			if fading:
+				_tweens_stop_and_reset()
+				_set_is_fading(false)
+	
+			if paused:
+				resume()
+		
+			for child in _audio_children:
+				_event = child
+			
+				if (child == _audio_children[current_switch]):
+					if(fade_out_active):
+						if _is_audio_stream(_event):
+							_fade_out()
+						else:
+							_event._fade_out(fade_out_time, fade_in_type)
+					else: _event.stop()
+				else:
+					_event.stop()
+		
+		_set_is_playing(false)
+		return
+		
 		for child in _playingChildren:
 			_event = child
 			if(fade_out_active):
@@ -89,8 +139,8 @@ func set_switch(soundID: int):
 	if !playing: return
 	
 	match switch_mode:
-		SwitchMode.CROSSFADE:
-			_crossfade_out(crossfade_time)
+		SwitchMode.CROSSFADE_AND_STOP:
+			_fade_out(crossfade_time)
 			_event = _audio_children[current_switch]
 			_fade_in(true, _event.get_volume_db(), crossfade_time)
 		SwitchMode.IMMEDIATE:
@@ -98,26 +148,27 @@ func set_switch(soundID: int):
 			play()
 		SwitchMode.NEXT_PLAY:
 			return
+		SwitchMode.CROSSFADE:
+			_crossfade_out(crossfade_time)
+			_event = _audio_children[current_switch]
+			_crossfade_in(_event.get_volume_db(), crossfade_time)
+			
 
 func _crossfade_out(fade_time:float = fade_out_time, fade_type:int = fade_out_type):
 	
 	if _is_audio_stream(_event):
-		_tween.interpolate_property(_event, "volume_db", _event.volume_db, -80, fade_time, fade_type, Tween.EASE_OUT, 0)
+		_tween.interpolate_property(_event, "volume_db", _event.get_volume_db(), -80, fade_time, fade_type, Tween.EASE_OUT, 0)
 		_tween.start()
 		_set_is_fading(true)
 		yield(_tween, "tween_all_completed")
 		emit_signal("fade_out_completed")
 		_set_is_fading(false)
+		print_debug("crossfade out complete")
 		
 	else:
 		_event._fade_out(fade_time, fade_type)
 
-func _crossfade_in(apply_mods:bool = false, target_volume:float = get_volume_db(), fade_time:float = fade_in_time, fade_type:int = fade_in_type):
-	if apply_mods:
-		var mods = _apply_modifier()
-		if mods is GDScriptFunctionState:
-			yield(mods, "completed")
-	
+func _crossfade_in(target_volume:float = get_volume_db(), fade_time:float = crossfade_time, fade_type:int = fade_in_type):
 	if _is_audio_stream(_event):
 		set_volume_db(-80)
 		if(!_event.playing):
@@ -126,12 +177,10 @@ func _crossfade_in(apply_mods:bool = false, target_volume:float = get_volume_db(
 		_tween.start()
 		yield(get_tree().create_timer(fade_time), "timeout")
 		emit_signal("fade_in_completed")
+		print_debug("crossfade in complete")
 	else:
-		_event._fade_in(true, _event.get_volume_db(), fade_in_time, fade_in_type)
-	
-	if apply_mods:
-		_set_is_playing(true)
-
+		_event._fade_to_volume(target_volume, fade_time, fade_type)
+		
 func _fade_in(apply_mods:bool = false, target_volume:float = get_volume_db(), fade_time:float = fade_in_time, fade_type:int = fade_in_type):
 	if playing: return
 	
