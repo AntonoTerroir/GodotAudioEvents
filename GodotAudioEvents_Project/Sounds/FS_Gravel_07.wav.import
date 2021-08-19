@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/FS_Gravel_07.wav-ae42b7a34f43d09837a73d1969dfa539.sample"
+
+[deps]
+
+source_file="res://Sounds/FS_Gravel_07.wav"
+dest_files=[ "res://.import/FS_Gravel_07.wav-ae42b7a34f43d09837a73d1969dfa539.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

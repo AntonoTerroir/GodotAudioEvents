@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/FootSteps_Generic_Concrete_05.wav-776e1ead40bae33bc9b0bec90a2ad4d1.sample"
+
+[deps]
+
+source_file="res://Sounds/FootSteps_Generic_Concrete_05.wav"
+dest_files=[ "res://.import/FootSteps_Generic_Concrete_05.wav-776e1ead40bae33bc9b0bec90a2ad4d1.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
